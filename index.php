@@ -1,6 +1,8 @@
 <?php
 include "db.php";
 include "function.php";
+
+$stmt = $pdo->query("SELECT * FROM pokemon");
 ?>
 <!doctype html>
 <html lang="en" data-bs-theme="dark">
@@ -13,21 +15,38 @@ include "function.php";
 </head>
 <body>
 <div class="container">
-    <div class="card" style="width: 18rem;">
-        <img src="img/abra.jpg" class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">Bodhi</h5>
-            <p class="card-text">Leeftijd 16</p>
+    <div class="row">
+        <?php
+        while ($row = $stmt->fetch()) {
+            //echo "<li>{$row['name']} ({$row['type']})</li>";
+        //}
+            $img_src = strtolower ($row['name']);
+            //echo $img_src;
+            // 250 = 100%
+            $hp_width = $row['hp'] /2.5;
+        ?>
+        <div class="col-md-3">
+            <div class="card">
+                <img src="img/<?= $img_src ?>.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <?=$row['name'] ?>
+                        <span class="badge text-bg-secondary">
+                            <?= $row ['type'] ?>
+                        </span>
+                    </h5>
+                    <p class="card-text">
+                    <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar" style="width: <?= $hp_width ?>%"><?= $row['hp']?></div>
+                    </div>
+                    </p>
+<!--                    <a class="btn btn-primary" href="#" role="button">Link</a>-->
+                </div>
+            </div>
         </div>
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Email address</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-        </div>
-        <div class="form-floating">
-            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
-            <label for="floatingTextarea">Comments</label>
-        </div>
+        <?php } ?>
     </div>
+
 </div>
 
 <script src="js/bootstrap.bundle.min.js"></script>
